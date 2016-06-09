@@ -16409,7 +16409,7 @@
 },{}],2:[function(require,module,exports){
 /**
  * angular-historical-back - Smart way to place back buttons
- * @version v0.0.21
+ * @version v0.0.22
  * @author Can Tecim, can.tecim@gmail.com
  * @license MIT
  */
