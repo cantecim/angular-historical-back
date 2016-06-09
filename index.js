@@ -67,8 +67,8 @@
 			 * @private
 			 */
 			function __push(name, params) {
-				routeStack.push(fromState.name);
-				paramStack.push(fromParams);
+				routeStack.push(name);
+				paramStack.push(params);
 				if (routeStack.length > ARRAY_CAP) {
 					_.drop(routeStack, routeStack.length - ARRAY_CAP);
 					_.drop(paramStack, paramStack.length - ARRAY_CAP);
