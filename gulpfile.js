@@ -13,19 +13,18 @@ var runSequence = require('run-sequence');
 gulp.task('javascript', function () {
 	var b = browserify({
 		entries: './source.js',
-		debug: true
+		debug: false
 	});
 
 	return b.bundle()
 		.pipe(source('dist.js'))
-		.pipe(buffer())
 		.pipe(gulp.dest('./'))
-		.pipe(rename('dist.min.js'))
+		.pipe(buffer())
 		.pipe(sourcemaps.init({loadMaps: true}))
-		// Add transformation tasks to the pipeline here.
 		.pipe(uglify())
 		.on('error', gutil.log)
 		.pipe(sourcemaps.write('./'))
+		.pipe(rename('dist.min.js'))
 		.pipe(gulp.dest('./'));
 });
 
@@ -42,8 +41,7 @@ gulp.task('banner', function () {
 	return gulp.src(['./index.js'])
 		.pipe(header(banner, {bower: bower}))
 		.pipe(rename('source.js'))
-		.pipe(gulp.dest('./'))
-
+		.pipe(gulp.dest('./'));
 });
 
 gulp.task('build', function() {

@@ -1,15 +1,15 @@
 /**
  * angular-historical-back - Smart way to place back buttons
- * @version v0.0.16
+ * @version v0.0.22
  * @author Can Tecim, can.tecim@gmail.com
  * @license MIT
  */
-(function (root, factory) {
+(function (factory) {
 	if(typeof define === "function" && define.amd) {
 		define(factory);
 	} else
 		factory();
-})(this, function() {
+})(function() {
 	'use strict';
 	var _ = require('lodash');
 

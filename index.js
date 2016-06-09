@@ -1,16 +1,16 @@
-(function (root, factory) {
+(function (factory) {
 	if(typeof define === "function" && define.amd) {
 		define(factory);
 	} else
 		factory();
-})(this, function() {
+})(function() {
 	'use strict';
 	var _ = require('lodash');
 
 	var __log = console.log.bind(console);
 
 	function log() {
-		//return;
+		return;
 		__log.apply(undefined, arguments);
 	}
 
@@ -72,6 +72,7 @@
 			 * @param fromParams
 			 */
 			function push(toState, toParams, fromState, fromParams) {
+				pop();
 				if (fromState.name.length) {
 					if (!lastPopped || lastPopped.name != toState.name) {
 						routeStack.push(fromState.name);
@@ -79,6 +80,7 @@
 						lastPopped = undefined;
 					}
 				} else {
+					return;
 					// first one
 					routeStack.push(toState.name);
 					paramStack.push(toParams);
