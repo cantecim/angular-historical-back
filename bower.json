@@ -1,9 +1,13 @@
 {
   "name": "angular-historical-back",
   "main": "index.js",
-  "version": "0.0.3",
+  "version": "0.0.8",
   "authors": [
-    "Can Tecim <can.tecim@gmail.com>"
+    {
+      "name": "Can Tecim",
+      "email": "can.tecim@gmail.com",
+      "homepage": "http://www.cantecim.com"
+    }
   ],
   "description": "Smart way to place back buttons",
   "keywords": [

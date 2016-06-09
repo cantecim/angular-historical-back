@@ -1,3 +1,9 @@
+/**
+ * angular-historical-back - Smart way to place back buttons
+ * @version v0.0.7
+ * @author Can Tecim, can.tecim@gmail.com
+ * @license MIT
+ */
 (function (root, factory) {
 	if(typeof define === "function" && define.amd) {
 		define(factory);
