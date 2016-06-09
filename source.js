@@ -1,6 +1,6 @@
 /**
  * angular-historical-back - Smart way to place back buttons
- * @version v0.0.29
+ * @version v0.0.30
  * @author Can Tecim, can.tecim@gmail.com
  * @license MIT
  */
@@ -56,7 +56,7 @@
 				// Actually we will not pop here
 				var name = _.last(routeStack);
 				if (name)
-					return lastPopped = {
+					return {
 						name: name,
 						param: _.last(paramStack)
 					};

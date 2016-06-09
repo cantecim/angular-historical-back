@@ -50,7 +50,7 @@
 				// Actually we will not pop here
 				var name = _.last(routeStack);
 				if (name)
-					return lastPopped = {
+					return {
 						name: name,
 						param: _.last(paramStack)
 					};
