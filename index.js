@@ -4,6 +4,7 @@
 	var __log = console.log.bind(console);
 
 	function log() {
+		return;
 		__log.apply(undefined, arguments);
 	}
 
@@ -13,7 +14,7 @@
 
 		stateDecorator.$inject = ["$delegate", "$rootScope", "ngHistoricalBack"];
 		function stateDecorator($delegate, $rootScope, ngHistoricalBack) {
-			log("lol decorating");
+			log("decorating");
 			$rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
 				ngHistoricalBack.push(toState, toParams, fromState, fromParams);
 			});
