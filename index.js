@@ -79,12 +79,13 @@
 						paramStack.push(fromParams);
 						lastPopped = undefined;
 					}
-				} else {
-					return;
-					// first one
-					routeStack.push(toState.name);
-					paramStack.push(toParams);
 				}
+				//else {
+				//	return;
+				//	// first one
+				//	routeStack.push(toState.name);
+				//	paramStack.push(toParams);
+				//}
 			}
 
 			return {

@@ -16409,7 +16409,7 @@
 },{}],2:[function(require,module,exports){
 /**
  * angular-historical-back - Smart way to place back buttons
- * @version v0.0.22
+ * @version v0.0.23
  * @author Can Tecim, can.tecim@gmail.com
  * @license MIT
  */
@@ -16425,7 +16425,7 @@
 	var __log = console.log.bind(console);
 
 	function log() {
-		//return;
+		return;
 		__log.apply(undefined, arguments);
 	}
 
@@ -16487,6 +16487,7 @@
 			 * @param fromParams
 			 */
 			function push(toState, toParams, fromState, fromParams) {
+				pop();
 				if (fromState.name.length) {
 					if (!lastPopped || lastPopped.name != toState.name) {
 						routeStack.push(fromState.name);
@@ -16494,6 +16495,7 @@
 						lastPopped = undefined;
 					}
 				} else {
+					return;
 					// first one
 					routeStack.push(toState.name);
 					paramStack.push(toParams);
