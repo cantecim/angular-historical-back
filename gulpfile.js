@@ -45,7 +45,7 @@ gulp.task('banner', function () {
 });
 
 gulp.task('build', function() {
-	runSequence(['bump', 'javascript']);
+	runSequence('bump');
 });
 gulp.task('default', ['build']);
 
@@ -60,6 +60,6 @@ gulp.task('bump', function (cb) {
 		}))
 		.pipe(gulp.dest('./')).
 		on('end', function() {
-			runSequence('banner');
+			runSequence(['banner', 'javascript']);
 		});
 });

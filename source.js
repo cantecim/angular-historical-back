@@ -1,6 +1,6 @@
 /**
  * angular-historical-back - Smart way to place back buttons
- * @version v0.0.25
+ * @version v0.0.29
  * @author Can Tecim, can.tecim@gmail.com
  * @license MIT
  */

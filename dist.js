@@ -16409,16 +16409,16 @@
 },{}],2:[function(require,module,exports){
 /**
  * angular-historical-back - Smart way to place back buttons
- * @version v0.0.24
+ * @version v0.0.29
  * @author Can Tecim, can.tecim@gmail.com
  * @license MIT
  */
 (function (factory) {
-	if(typeof define === "function" && define.amd) {
+	if (typeof define === "function" && define.amd) {
 		define(factory);
 	} else
 		factory();
-})(function() {
+})(function () {
 	'use strict';
 	var _ = require('lodash');
 
@@ -16443,14 +16443,9 @@
 			return $delegate;
 		}
 
-		this.decorate = function decorate($provide) {
-			$provide.decorator("$state", stateDecorator)
-		};
-
 		this.$get = [function ngHistoricalBackFactory() {
 			var routeStack = [],
-				paramStack = [],
-				lastPopped;
+				paramStack = [];
 
 			/**
 			 * Pop once
@@ -16487,29 +16482,34 @@
 			 * @param fromParams
 			 */
 			function push(toState, toParams, fromState, fromParams) {
-				pop();
-				if (fromState.name.length) {
-					if (!lastPopped || lastPopped.name != toState.name) {
-						routeStack.push(fromState.name);
-						paramStack.push(fromParams);
-						lastPopped = undefined;
-					}
+				if (__backButtonPressed) {
+					__backButtonPressed = false;
+
+					realPop();
+				} else if (fromState.name.length) {
+					routeStack.push(fromState.name);
+					paramStack.push(fromParams);
 				}
-				//else {
-				//	return;
-				//	// first one
-				//	routeStack.push(toState.name);
-				//	paramStack.push(toParams);
-				//}
+			}
+
+			var __backButtonPressed = false;
+
+			function backButtonPressed() {
+				__backButtonPressed = true;
 			}
 
 			return {
 				push: push,
 				pop: pop,
-				realPop: realPop
+				realPop: realPop,
+				backButtonPressed: backButtonPressed
 			};
 
-		}]
+		}],
+
+			this.decorate = function decorate($provide) {
+				$provide.decorator("$state", stateDecorator)
+			};
 
 	});
 
@@ -16524,7 +16524,7 @@
 
 			if (prev) {
 				angular.element(el).click(function () {
-					ngHistoricalBack.realPop();
+					ngHistoricalBack.backButtonPressed();
 					$state.go(prev.name, prev.param, {
 						reload: (parent.length) ? parent : true
 					});
