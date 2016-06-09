@@ -19,6 +19,8 @@ gulp.task('javascript', ['banner'], function () {
 	return b.bundle()
 		.pipe(source('dist.js'))
 		.pipe(buffer())
+		.pipe(gulp.dest('./'))
+		.pipe(rename('dist.min.js'))
 		.pipe(sourcemaps.init({loadMaps: true}))
 		// Add transformation tasks to the pipeline here.
 		.pipe(uglify())
