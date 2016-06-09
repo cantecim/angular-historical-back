@@ -41,7 +41,10 @@ gulp.task('banner', function () {
 	return gulp.src(['./index.js'])
 		.pipe(header(banner, {bower: bower}))
 		.pipe(rename('source.js'))
-		.pipe(gulp.dest('./'));
+		.pipe(gulp.dest('./'))
+		.on('end', function() {
+			runSequence('javascript');
+		});
 });
 
 gulp.task('build', function() {
@@ -58,8 +61,8 @@ gulp.task('bump', function (cb) {
 		.pipe(bump({
 			type: type
 		}))
-		.pipe(gulp.dest('./')).
-		on('end', function() {
-			runSequence(['banner', 'javascript']);
+		.pipe(gulp.dest('./'))
+		.on('end', function() {
+			runSequence('banner');
 		});
 });
