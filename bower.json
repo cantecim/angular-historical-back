@@ -1,7 +1,7 @@
 {
   "name": "angular-historical-back",
   "main": "index.js",
-  "version": "0.0.33",
+  "version": "0.0.35",
   "authors": [
     {
       "name": "Can Tecim",

@@ -30,7 +30,8 @@
 
 		this.$get = [function ngHistoricalBackFactory() {
 			var routeStack = [],
-				paramStack = [];
+				paramStack = [],
+				ARRAY_CAP = 15;
 
 			/**
 			 * Pop once
@@ -54,8 +55,24 @@
 						name: name,
 						param: _.last(paramStack)
 					};
-				else
-					return undefined;
+
+				return undefined;
+			}
+
+			/**
+			 * internal push function
+			 *
+			 * @param name
+			 * @param params
+			 * @private
+			 */
+			function __push(name, params) {
+				routeStack.push(fromState.name);
+				paramStack.push(fromParams);
+				if (routeStack.length > ARRAY_CAP) {
+					_.drop(routeStack, routeStack.length - ARRAY_CAP);
+					_.drop(paramStack, paramStack.length - ARRAY_CAP);
+				}
 			}
 
 			/**
@@ -72,8 +89,7 @@
 
 					realPop();
 				} else if (fromState.name.length) {
-					routeStack.push(fromState.name);
-					paramStack.push(fromParams);
+					__push(fromState.name, fromParams);
 				}
 			}
 
