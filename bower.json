@@ -1,0 +1,24 @@
+{
+  "name": "angular-historical-back",
+  "main": "index.js",
+  "authors": [
+    "Can Tecim <can.tecim@gmail.com>"
+  ],
+  "description": "Smart way to place back buttons",
+  "keywords": [
+    "angular",
+    "back",
+    "ui.router",
+    "historical",
+    "ngHistoricalBack"
+  ],
+  "license": "MIT",
+  "homepage": "",
+  "ignore": [
+    "**/.*",
+    "node_modules",
+    "bower_components",
+    "test",
+    "tests"
+  ]
+}
