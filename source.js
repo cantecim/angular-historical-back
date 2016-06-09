@@ -1,6 +1,6 @@
 /**
  * angular-historical-back - Smart way to place back buttons
- * @version v0.0.8
+ * @version v0.0.16
  * @author Can Tecim, can.tecim@gmail.com
  * @license MIT
  */
@@ -44,22 +44,33 @@
 				lastPopped;
 
 			/**
+			 * Pop once
+			 */
+			function realPop() {
+				routeStack.pop();
+				paramStack.pop();
+			}
+
+			/**
+			 *  Return the last
+			 *  It's not popping actually
 			 *
 			 * @returns {{name: T, param: T}}
 			 */
 			function pop() {
 				// Actually we will not pop here
-				var name = routeStack.pop();
+				var name = _.last(routeStack);
 				if (name)
 					return lastPopped = {
 						name: name,
-						param: paramStack.pop()
+						param: _.last(paramStack)
 					};
 				else
 					return undefined;
 			}
 
 			/**
+			 * Push onto stack
 			 *
 			 * @param toState
 			 * @param toParams
@@ -82,7 +93,8 @@
 
 			return {
 				push: push,
-				pop: pop
+				pop: pop,
+				realPop: realPop
 			};
 
 		}]
@@ -100,6 +112,7 @@
 
 			if (prev) {
 				angular.element(el).click(function () {
+					ngHistoricalBack.realPop();
 					$state.go(prev.name, prev.param, {
 						reload: (parent.length) ? parent : true
 					});

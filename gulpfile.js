@@ -10,7 +10,7 @@ var header = require('gulp-header');
 var rename = require('gulp-rename');
 var runSequence = require('run-sequence');
 
-gulp.task('javascript', ['banner'], function () {
+gulp.task('javascript', function () {
 	var b = browserify({
 		entries: './source.js',
 		debug: true
@@ -60,5 +60,8 @@ gulp.task('bump', function (cb) {
 		.pipe(bump({
 			type: type
 		}))
-		.pipe(gulp.dest('./'));
+		.pipe(gulp.dest('./')).
+		on('end', function() {
+			runSequence('banner');
+		});
 });
