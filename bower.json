@@ -1,6 +1,7 @@
 {
   "name": "angular-historical-back",
   "main": "index.js",
+  "version": "0.0.3",
   "authors": [
     "Can Tecim <can.tecim@gmail.com>"
   ],
@@ -14,7 +15,8 @@
   ],
   "dependencies": {
     "angular-ui-router": "~0.2.13",
-    "angular": ">= 1.5.0"
+    "angular": ">= 1.5.0",
+    "lodash": "^4.13.1"
   },
   "license": "MIT",
   "homepage": "",

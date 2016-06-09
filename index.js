@@ -1,12 +1,15 @@
 (function () {
 	'use strict';
+	var _ = require('lodash');
 
 	var __log = console.log.bind(console);
 
 	function log() {
-		return;
+		//return;
 		__log.apply(undefined, arguments);
 	}
+
+	log("loadash", _);
 
 	var module = angular.module('angular-historical-back', []);
 
@@ -36,6 +39,7 @@
 			 * @returns {{name: T, param: T}}
 			 */
 			function pop() {
+				// Actually we will not pop here
 				var name = routeStack.pop();
 				if (name)
 					return lastPopped = {
