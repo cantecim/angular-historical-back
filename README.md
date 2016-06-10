@@ -33,4 +33,4 @@ Load the dist.min.js into the page or bundled js file
 MIT
 
 ## Contributions
-I will be happy, if you want to do contributions. All are welcome.
+All are welcome.
