@@ -1,6 +1,6 @@
 /**
  * angular-historical-back - Smart way to place back buttons
- * @version v0.0.36
+ * @version v0.1.0
  * @author Can Tecim, can.tecim@gmail.com
  * @license MIT
  */
@@ -122,12 +122,15 @@
 
 	module.directive('historicalBack', ['$state', 'ngHistoricalBack', function ($state, ngHistoricalBack) {
 		function compile(el, attrs, transclude) {
-			var prev = ngHistoricalBack.pop(),
+			var reloadOption = attrs.historicalBack,
+				prev = ngHistoricalBack.pop(),
 				parent = (prev) ? prev.name.split('.') : [];
 			if (parent) {
 				parent.splice(parent.length - 1, 1);
 				parent = parent.join('.');
 			}
+			if (reloadOption)
+				parent = reloadOption;
 
 			if (prev) {
 				angular.element(el).click(function () {

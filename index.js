@@ -116,12 +116,15 @@
 
 	module.directive('historicalBack', ['$state', 'ngHistoricalBack', function ($state, ngHistoricalBack) {
 		function compile(el, attrs, transclude) {
-			var prev = ngHistoricalBack.pop(),
+			var reloadOption = attrs.historicalBack,
+				prev = ngHistoricalBack.pop(),
 				parent = (prev) ? prev.name.split('.') : [];
 			if (parent) {
 				parent.splice(parent.length - 1, 1);
 				parent = parent.join('.');
 			}
+			if (reloadOption)
+				parent = reloadOption;
 
 			if (prev) {
 				angular.element(el).click(function () {
