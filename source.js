@@ -1,152 +1,152 @@
 /**
  * angular-historical-back - Smart way to place back buttons
- * @version v0.1.0
+ * @version v0.1.1
  * @author Can Tecim, can.tecim@gmail.com
  * @license MIT
  */
 (function (factory) {
-	if (typeof define === "function" && define.amd) {
-		define(factory);
-	} else
-		factory();
+  if (typeof define === "function" && define.amd) {
+    define(factory);
+  } else
+    factory();
 })(function () {
-	'use strict';
-	var _ = require('lodash');
+  'use strict';
+  var _ = require('lodash');
 
-	var __log = console.log.bind(console);
+  var __log = console.log.bind(console);
 
-	function log() {
-		return;
-		__log.apply(undefined, arguments);
-	}
+  function log() {
+    return;
+    __log.apply(undefined, arguments);
+  }
 
-	var module = angular.module('angular-historical-back', []);
+  var module = angular.module('angular-historical-back', []);
 
-	module.provider('ngHistoricalBack', function () {
+  module.provider('ngHistoricalBack', function () {
 
-		stateDecorator.$inject = ["$delegate", "$rootScope", "ngHistoricalBack"];
-		function stateDecorator($delegate, $rootScope, ngHistoricalBack) {
-			log("decorating");
-			$rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
-				ngHistoricalBack.push(toState, toParams, fromState, fromParams);
-			});
+    stateDecorator.$inject = ["$delegate", "$rootScope", "ngHistoricalBack"];
+    function stateDecorator($delegate, $rootScope, ngHistoricalBack) {
+      log("decorating");
+      $rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
+        ngHistoricalBack.push(toState, toParams, fromState, fromParams);
+      });
 
-			return $delegate;
-		}
+      return $delegate;
+    }
 
-		this.$get = [function ngHistoricalBackFactory() {
-			var routeStack = [],
-				paramStack = [],
-				ARRAY_CAP = 15;
+    this.$get = [function ngHistoricalBackFactory() {
+      var routeStack = [],
+        paramStack = [],
+        ARRAY_CAP = 15;
 
-			/**
-			 * Pop once
-			 */
-			function realPop() {
-				routeStack.pop();
-				paramStack.pop();
-			}
+      /**
+       * Pop once
+       */
+      function realPop() {
+        routeStack.pop();
+        paramStack.pop();
+      }
 
-			/**
-			 *  Return the last
-			 *  It's not popping actually
-			 *
-			 * @returns {{name: T, param: T}}
-			 */
-			function pop() {
-				// Actually we will not pop here
-				var name = _.last(routeStack);
-				if (name)
-					return {
-						name: name,
-						param: _.last(paramStack)
-					};
+      /**
+       *  Return the last
+       *  It's not popping actually
+       *
+       * @returns {{name: T, param: T}}
+       */
+      function pop() {
+        // Actually we will not pop here
+        var name = _.last(routeStack);
+        if (name)
+          return {
+            name: name,
+            param: _.last(paramStack)
+          };
 
-				return undefined;
-			}
+        return undefined;
+      }
 
-			/**
-			 * internal push function
-			 *
-			 * @param name
-			 * @param params
-			 * @private
-			 */
-			function __push(name, params) {
-				routeStack.push(name);
-				paramStack.push(params);
-				if (routeStack.length > ARRAY_CAP) {
-					_.drop(routeStack, routeStack.length - ARRAY_CAP);
-					_.drop(paramStack, paramStack.length - ARRAY_CAP);
-				}
-			}
+      /**
+       * internal push function
+       *
+       * @param name
+       * @param params
+       * @private
+       */
+      function __push(name, params) {
+        routeStack.push(name);
+        paramStack.push(params);
+        if (routeStack.length > ARRAY_CAP) {
+          _.drop(routeStack, routeStack.length - ARRAY_CAP);
+          _.drop(paramStack, paramStack.length - ARRAY_CAP);
+        }
+      }
 
-			/**
-			 * Push onto stack
-			 *
-			 * @param toState
-			 * @param toParams
-			 * @param fromState
-			 * @param fromParams
-			 */
-			function push(toState, toParams, fromState, fromParams) {
-				if (__backButtonPressed) {
-					__backButtonPressed = false;
+      /**
+       * Push onto stack
+       *
+       * @param toState
+       * @param toParams
+       * @param fromState
+       * @param fromParams
+       */
+      function push(toState, toParams, fromState, fromParams) {
+        if (__backButtonPressed) {
+          __backButtonPressed = false;
 
-					realPop();
-				} else if (fromState.name.length) {
-					__push(fromState.name, fromParams);
-				}
-			}
+          realPop();
+        } else if (fromState.name.length) {
+          __push(fromState.name, fromParams);
+        }
+      }
 
-			var __backButtonPressed = false;
+      var __backButtonPressed = false;
 
-			function backButtonPressed() {
-				__backButtonPressed = true;
-			}
+      function backButtonPressed() {
+        __backButtonPressed = true;
+      }
 
-			return {
-				push: push,
-				pop: pop,
-				realPop: realPop,
-				backButtonPressed: backButtonPressed
-			};
+      return {
+        push: push,
+        pop: pop,
+        realPop: realPop,
+        backButtonPressed: backButtonPressed
+      };
 
-		}],
+    }],
 
-			this.decorate = function decorate($provide) {
-				$provide.decorator("$state", stateDecorator)
-			};
+      this.decorate = function decorate($provide) {
+        $provide.decorator("$state", stateDecorator)
+      };
 
-	});
+  });
 
-	module.directive('historicalBack', ['$state', 'ngHistoricalBack', function ($state, ngHistoricalBack) {
-		function compile(el, attrs, transclude) {
-			var reloadOption = attrs.historicalBack,
-				prev = ngHistoricalBack.pop(),
-				parent = (prev) ? prev.name.split('.') : [];
-			if (parent) {
-				parent.splice(parent.length - 1, 1);
-				parent = parent.join('.');
-			}
-			if (reloadOption)
-				parent = reloadOption;
+  module.directive('historicalBack', ['$state', 'ngHistoricalBack', function ($state, ngHistoricalBack) {
+    function compile(el, attrs, transclude) {
+      var reloadOption = attrs.historicalBack,
+        prev = ngHistoricalBack.pop(),
+        parent = (prev) ? prev.name.split('.') : [];
+      if (parent) {
+        parent.splice(parent.length - 1, 1);
+        parent = parent.join('.');
+      }
+      if (reloadOption)
+        parent = reloadOption;
 
-			if (prev) {
-				angular.element(el).click(function () {
-					ngHistoricalBack.backButtonPressed();
-					$state.go(prev.name, prev.param, {
-						reload: (parent.length) ? parent : true
-					});
-				});
-			} else {
-				angular.element(el).remove();
-			}
-		}
+      if (prev) {
+        angular.element(el).click(function () {
+          ngHistoricalBack.backButtonPressed();
+          $state.go(prev.name, prev.param, {
+            reload: (parent.length) ? parent : true
+          });
+        });
+      } else {
+        angular.element(el).remove();
+      }
+    }
 
-		return {
-			restrict: 'A',
-			compile: compile
-		};
-	}])
+    return {
+      restrict: 'A',
+      compile: compile
+    };
+  }])
 });
