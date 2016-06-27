@@ -115,7 +115,7 @@
   });
 
   module.directive('historicalBack', ['$state', 'ngHistoricalBack', function ($state, ngHistoricalBack) {
-    function compile(el, attrs, transclude) {
+    function postLink(scope, el, attrs) {
       var reloadOption = attrs.historicalBack,
         prev = ngHistoricalBack.pop(),
         parent = (prev) ? prev.name.split('.') : [];
@@ -127,20 +127,20 @@
         parent = reloadOption;
 
       if (prev) {
-        angular.element(el).click(function () {
+        el.on('click', function () {
           ngHistoricalBack.backButtonPressed();
           $state.go(prev.name, prev.param, {
             reload: (parent.length) ? parent : true
           });
         });
       } else {
-        angular.element(el).remove();
+        el.remove();
       }
     }
 
     return {
       restrict: 'A',
-      compile: compile
+      link: postLink
     };
   }])
 });

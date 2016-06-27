@@ -16409,7 +16409,7 @@
 },{}],2:[function(require,module,exports){
 /**
  * angular-historical-back - Smart way to place back buttons
- * @version v0.1.1
+ * @version v0.1.2
  * @author Can Tecim, can.tecim@gmail.com
  * @license MIT
  */
@@ -16530,7 +16530,7 @@
   });
 
   module.directive('historicalBack', ['$state', 'ngHistoricalBack', function ($state, ngHistoricalBack) {
-    function compile(el, attrs, transclude) {
+    function postLink(scope, el, attrs) {
       var reloadOption = attrs.historicalBack,
         prev = ngHistoricalBack.pop(),
         parent = (prev) ? prev.name.split('.') : [];
@@ -16542,21 +16542,22 @@
         parent = reloadOption;
 
       if (prev) {
-        angular.element(el).click(function () {
+        el.on('click', function () {
           ngHistoricalBack.backButtonPressed();
           $state.go(prev.name, prev.param, {
             reload: (parent.length) ? parent : true
           });
         });
       } else {
-        angular.element(el).remove();
+        el.remove();
       }
     }
 
     return {
       restrict: 'A',
-      compile: compile
+      link: postLink
     };
   }])
 });
+
 },{"lodash":1}]},{},[2]);
