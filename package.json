@@ -1,6 +1,6 @@
 {
   "name": "angular-historical-back",
-  "version": "0.1.2",
+  "version": "0.1.3",
   "description": "Smart way to place back buttons",
   "main": "index.js",
   "scripts": {

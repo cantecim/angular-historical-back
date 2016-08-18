@@ -1,9 +1,9 @@
-(function (factory) {
+(function(factory) {
   if (typeof define === "function" && define.amd) {
     define(factory);
   } else
     factory();
-})(function () {
+})(function() {
   'use strict';
   var _ = require('lodash');
 
@@ -16,12 +16,33 @@
 
   var module = angular.module('angular-historical-back', []);
 
-  module.provider('ngHistoricalBack', function () {
+  module.service('ngHistoricalBackUtils', ["$state", "ngHistoricalBack", function($state, ngHistoricalBack) {
+
+    function goBack(prev, parent) {
+      var parsedPrev = ngHistoricalBack.parsePreviousState();
+      prev = _.defaultTo(prev, parsedPrev.prev);
+      parent = _.defaultTo(parent, parsedPrev.parent);
+
+      if (prev) {
+        ngHistoricalBack.backButtonPressed();
+        $state.go(prev.name, prev.param, {
+          reload: (parent.length) ? parent : true
+        });
+      }
+    }
+
+    return {
+      goBack: goBack
+    };
+
+  }]);
+
+  module.provider('ngHistoricalBack', function() {
 
     stateDecorator.$inject = ["$delegate", "$rootScope", "ngHistoricalBack"];
     function stateDecorator($delegate, $rootScope, ngHistoricalBack) {
       log("decorating");
-      $rootScope.$on("$stateChangeSuccess", function (event, toState, toParams, fromState, fromParams) {
+      $rootScope.$on("$stateChangeSuccess", function(event, toState, toParams, fromState, fromParams) {
         ngHistoricalBack.push(toState, toParams, fromState, fromParams);
       });
 
@@ -99,11 +120,26 @@
         __backButtonPressed = true;
       }
 
+      function parsePreviousState() {
+        var prev = pop(),
+          parent = (prev) ? prev.name.split('.') : [];
+        if (parent) {
+          parent.splice(parent.length - 1, 1);
+          parent = parent.join('.');
+        }
+
+        return {
+          prev: prev,
+          parent: parent
+        }
+      }
+
       return {
         push: push,
         pop: pop,
         realPop: realPop,
-        backButtonPressed: backButtonPressed
+        backButtonPressed: backButtonPressed,
+        parsePreviousState: parsePreviousState
       };
 
     }],
@@ -114,24 +150,19 @@
 
   });
 
-  module.directive('historicalBack', ['$state', 'ngHistoricalBack', function ($state, ngHistoricalBack) {
+  module.directive('historicalBack', ['ngHistoricalBack', 'ngHistoricalBackUtils', function(ngHistoricalBack, ngHistoricalBackUtils) {
     function postLink(scope, el, attrs) {
+      var parsedPrev = ngHistoricalBack.parsePreviousState();
       var reloadOption = attrs.historicalBack,
-        prev = ngHistoricalBack.pop(),
-        parent = (prev) ? prev.name.split('.') : [];
-      if (parent) {
-        parent.splice(parent.length - 1, 1);
-        parent = parent.join('.');
-      }
+        prev = parsedPrev.prev,
+        parent = parsedPrev.parent;
+
       if (reloadOption)
         parent = reloadOption;
 
       if (prev) {
-        el.on('click', function () {
-          ngHistoricalBack.backButtonPressed();
-          $state.go(prev.name, prev.param, {
-            reload: (parent.length) ? parent : true
-          });
+        el.on('click', function() {
+          ngHistoricalBackUtils.goBack(prev, parent);
         });
       } else {
         el.remove();
